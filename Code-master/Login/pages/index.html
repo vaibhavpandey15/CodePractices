@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <script src="/Login/libs/angular.min.js"></script>
+    <script src="/Login/libs/ngStorage.min.js"></script>
+    <script src="/Login/js/module.js"></script>
+    <script src="/Login/js/factory.js"></script>
+    <script src="/Login/js/controller.js"></script>
+</head>
+<body>
+   <div ng-app  ="myapp" ng-controller="myctrl">
+      <tr>UserId:
+    <input type ="text" ng-model ="name">
+    </tr>
+    <br>
+    <tr>Passwo:
+    <input type ="password" ng-model="pass">
+    </tr>
+   
+  <br>
+  <Button type ="button" ng-click="call()">Login</Button>
+      <ul>
+       <li ng-repeat="i in result"}>
+ 
+      {{i.Name}}
+      </li>
+      </ul>
+</div>    
+</body>
+</html>

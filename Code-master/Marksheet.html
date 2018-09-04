@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Marksheet</title>
+    <style>
+table, th, td {
+    border: 1px solid black;
+}
+    </style>
+    <script src="libs/angular.min.js"></script>
+    <script>
+        var app = angular.module("myapp",[])
+        app.factory("myfactory",()=>{
+          
+            var object ={
+                salaryArr:[],
+                 sum(phy,chem,math){
+                    var totalSum =parseInt(math)+parseInt(phy)+parseInt(chem)
+                  return totalSum;
+                },
+                addObj(name,rollno,phy,chem,math,totalSum){
+                    var obj ={Name:name,Roll:rollno,Phy:phy,Chem:chem,Math:math,Total:totalSum}
+                    this.salaryArr.push(obj);
+                  return obj;
+                   },
+                getArr(){
+				return this.salaryArr;
+                   },
+            
+                 percentage(){
+                    var p = (totalSum/300)*100
+                    return p;
+                     console.log(p);
+                }
+				
+                }
+                
+            
+            return object;
+        });
+        var app2 =angular.module("myapp2",["myapp"]);
+        app2.controller("mycontroller2",($scope,myfactory)=>{
+            $scope.addObj=()=>{
+                $scope.sum = myfactory.sum($scope.phy,$scope.chem,$scope.math);
+            //    $scope.p = myfactory.percentage();
+            myfactory.addObj($scope.name,$scope.rollno,$scope.phy,$scope.chem,$scope.math,$scope.sum);
+                $scope.salaryArr =myfactory.getArr();
+               
+            }
+        });
+        app.controller("mycontroller",($scope,myfactory)=>{
+            
+            
+            
+         
+        });
+    </script>
+</head>
+<body ng-app="myapp2">
+    <div ng-controller ="mycontroller2">
+        <table>
+            <tr>
+                <td><label for="">Name</label></td>
+                <td><input type="text" ng-model="name"></td>
+            </tr>
+             <tr>
+                <td><label for="">Rollno</label></td>
+                <td><input type="text" ng-model="rollno"></td>
+            </tr>
+             <tr>
+                <td><label for="">Physics</label></td>
+                <td><input type="text" ng-model="phy"></td>
+            </tr>
+            <tr>
+                <td><label for="">Chemistry</label></td>
+                <td><input type="text" ng-model="chem"></td>
+            </tr>
+            <tr>
+                <td><label for="">Mathematics</label></td>
+                <td><input type="text" ng-model="math" ng-change ="sum()"></td>
+            </tr>
+           </table>
+            <tr> <button ng-click="addObj()">Add</button>
+                        <input type="checkbox" ng-model="show" >
+                                               
+    </tr>
+      <tr><input type="text" ng-show ="show" ng-model ="Search_by" placeholder="type value to search">
+	</tr>
+ 
+       
+        <div>      
+        <table style="width:100%"  >
+				<tr>
+					<td>Name</td>
+					<td>RollNo</td>
+					<td>Physics</td>
+                    <td>Chemistry</td>
+                    <td>Math</td>
+	                <td>Total</td>
+	                <td><img src="arrow.png" ng-model="Roll"> </td>			 
+            </tr>
+           
+			
+				<tr ng-repeat="i in salaryArr|filter:Search_by">
+					<td>{{i.Name}}</td>
+					<td>{{i.Roll}}</td>
+					<td>{{i.Phy}}</td>
+                    <td>{{i.Chem}}</td>
+                    <td>{{i.Math}}</td>
+                    <td>{{i.Total}}</td>
+                   
+				
+            </tr>
+		    
+<!--
+           <ul>
+            <li ng-repeat="i in salaryArr">
+              
+               <span>{{i.Name}}   {{i.Roll}}  {{i.Phy}}  {{i.Chem}}  {{i.Math}} {{i}} </span>
+                <li ng-repeat="i in totalArr">
+                <span>{{i}}</span>  
+               
+            </li>
+        </ul>
+-->
+            
+            </table>
+       
+          </div>
+    
+    </div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="libs/angular.min.js"></script>
+	<script>
+	var app = angular.module("myapp",[]);
+	app.controller("myctrl",($scope,myfactory)=>{
+		$scope.doSearch=()=>{
+			var promise = myfactory.callServer($scope.search);
+			console.log("I Got the Promise...");
+			for(var i = 1; i<=10; i++){
+				console.log("Time Pass",2*i);
+			}
+			promise.then((data)=>{
+				$scope.result = data;
+				console.log("Get the Data in Promise...")
+			},(err)=>{
+				$scope.result = err;
+				console.log("Get the Err in Promise...");
+			})
+			
+		}
+	});
+	app.factory("myfactory",($http,$q)=>{
+		var object = {
+			callServer:(searchParam)=>{
+				var pr = $q.defer();
+             //  var url = "http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=a340fc68cc0b41febdcf3a40ad941b03"
+				var url = "http://api.giphy.com/v1/gifs/search?q="+searchParam+"&api_key=a340fc68cc0b41febdcf3a40ad941b03";
+				$http.get(url).then(function(data){
+					pr.resolve(data.data.data);
+					console.log("Data is Success...",data);
+				}
+					,function(err){
+					pr.reject(err);	
+					console.log("Data is Error");
+					});
+				
+				return pr.promise;
+				}
+		}
+		return object;
+	});	
+	</script>
+</head>
+<body ng-app="myapp" ng-controller="myctrl">
+	<input type="text" ng-model="search" placeholder="Type Text to Search">
+	<button ng-click="doSearch()">Search Now</button>
+	<ul>
+		<li ng-repeat ="i in result">
+			<img src="{{i.images.original.url}}">
+		</li>
+	</ul>
+	
+</body >
+</html>

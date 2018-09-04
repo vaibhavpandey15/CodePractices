@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <script src="/Angular/libs/angular.min.js"></script>
+    <script src="/Angular/libs/ngStorage.min.js"></script>
+    <script >
+    var app2 = angular.module("myapp2",[]);
+        app2.factory("myfactory2",($http,$q)=>{
+           var obj={
+                callQnjson(){
+  
+            var pr = $q.defer();
+            var url ="server1.json";
+            $http.get(url).then(function(data){
+                	pr.resolve(data.data.Qun);
+            //   console.log();
+            },function(err){
+					pr.reject(err);
+				});
+				return pr.promise;
+				
+                }
+               
+           }
+           return obj;
+        });
+app2.controller("myctrl2",($scope,myfactory2,$filter,$window,$localStorage)=>{
+  $scope.disableButtons =true;
+$scope.store = $localStorage;
+    console.log($scope.store);
+     $scope.count =1;
+    
+     $scope.callP=()=>{
+        $scope.count -=$scope.count;
+      
+
+    }
+
+    
+           $scope.call=()=>{
+               console.log("controllercall");
+             
+             
+var promise = myfactory2.callQnjson();
+    promise.then(function(data){
+         $filter('filter')(data,function (d){
+        //console.log(x);
+            if (d.Count == $scope.count){
+              Ques(d);
+                 if($scope.count>1){
+        $scope.disableButtons =false;
+    }
+                }
+            
+                }),
+            
+            $scope.count ++;
+          
+       });
+               
+                
+ }
+    function  Ques(d){
+        $scope.Ques = d.Qn;
+        $scope.Ans= d.Ans;
+
+}  
+   
+ 
+});
+    </script>
+</head>
+<body ng-app ="myapp2" ng-controller ="myctrl2">
+   <div ng-model="Ques">
+      Q:{{Ques}}
+       <ul>
+			<li ng-repeat="option in Ans">
+				<label>
+					<input type="radio" name="answer" value="{{option}}" >
+					{{option}}
+				</label>
+			</li>
+		</ul>
+
+</div>
+<Button type ="button" ng-click="call()" >Next</Button>
+    <Button type ="button" ng-click="callP()" ng-disabled="disableButtons">Prev</Button>
+    </body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ForeCast</title>
+    <script src="libs/angular.min.js"></script>
+    <script>
+        var app = angular.module("myapp",[]);
+        app.factory("myfactory",($http,$q)=>{
+            var object = {
+                callServer(city){
+                   
+                    var pr =$q.defer();
+                    var url ="http://api.apixu.com/v1/forecast.json?key=a5d78dd0e5fb47c4abb194523172706&q="+city+"&days="+10;
+                    $http.get(url).then(function(data){
+                        pr.resolve(data.data.forecast.forecastday);
+                        console.log(data);
+                    }
+                ,function(err){
+                        pr.reject(err);
+                    
+                                    
+                    });
+                return pr.promise; 
+            }
+            }
+            return object;
+        })
+        app.controller("myctrl",($scope,myfactory)=>{
+            $scope.callMe=()=>{
+                console.log("call me call....")
+                var city = $scope.city;
+                var promise = myfactory.callServer(city);
+                for(var i = 1; i<=10; i++){
+				console.log("DO Something else",i);
+			}
+                promise.then(function(data){
+                 $scope.result = data;
+                },
+                             function(err){
+                                       $scope.result =err;
+                                       
+                });
+                
+            }
+            
+        });
+    </script>
+</head>
+
+   <body ng-app="myapp" ng-controller="myctrl">
+	<input type="text" ng-model="city" placeholder="Type City to Search">
+	<button ng-click="callMe()">ForeCast</button>
+	<br>
+	
+	<ul>
+	    <li ng-repeat ="i in result">
+	    Date IS:{{i.date}}
+	    <br>
+	    Moonrise:{{i.astro.moonrise}}
+	    <br>
+	    Moonset:{{i.astro.moonset}}
+	    <br>
+	    Sunrise:{{i.astro.sunrise}}
+	    <br>
+	    Sunset:{{i.astro.sunset}}
+	    <br>
+	    AvgTemprature:{{i.day.avgtemp_c}}
+	    <br>
+	    Condition:<img ng-src="{{i.day.condition.icon}}">
+	             {{i.day.condition.text}}
+	    <br>
+	    
+	    </li>
+	</ul>
+	
+	
+	
+    </body>

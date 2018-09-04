@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+    <script src="/libs/angular.min.js"></script>
+    <script src="/libs/ngStorage.min.js"></script>
+   <link rel="stylesheet" href="/Login/stylesheet/main.css">
+    <script >
+         
+    var app2 = angular.module("myapp2",["ngStorage"]);
+        app2.factory("myfactory2",($http,$q)=>{
+           var obj={
+                callQnjson(){
+  
+            var pr = $q.defer();
+            var url ="server1.json";
+            $http.get(url).then(function(data){
+                	pr.resolve(data.data.Qun);
+            //   console.log();
+            },function(err){
+					pr.reject(err);
+				});
+				return pr.promise;
+				
+                }
+               
+           }
+           return obj;
+        });
+app2.controller("myctrl2",($scope,myfactory2,$filter,$window,$localStorage)=>{
+    $scope.datastore=$localStorage;
+$scope.disableButtons =true;
+$scope.count =1;
+var promise = myfactory2.callQnjson();
+   promise.then(function(data){
+         $filter('filter')(data,function (d){
+    
+            if (d.Count == "1"){
+              Ques(d);
+                $scope.ArrImage =data;
+     }
+        });
+        
+    })
+     
+    $scope.callP=()=>{
+          $scope.count--;
+        var promise = myfactory2.callQnjson();
+    promise.then(function(data){
+         $filter('filter')(data,function (d){
+    
+            if (d.Count == $scope.count){
+              Ques(d);
+     }
+         });
+        
+    })
+     }
+     
+    $scope.call=()=>{
+            
+              $scope.count ++;
+var promise = myfactory2.callQnjson();
+    promise.then(function(data){
+         $filter('filter')(data,function (d){
+    
+            if (d.Count == $scope.count){
+              Ques(d);
+                 if($scope.count>1){
+        $scope.disableButtons =false;
+    }
+                }
+            
+                });
+            });
+               
+               
+ }
+    function  Ques(d){
+        $scope.Ques = d.Qn;
+        $scope.Ans= d.Ans;
+
+
+} 
+    $scope.change=(x)=>{
+        
+        
+     promise.then(function(data){
+         $filter('filter')(data,function (d){
+     if (d.Count == $scope.count){
+                d.IsMark =true;
+                 $scope.ArrImage= data;
+               // console.log($scope.ArrImage);
+         if(x=="Pranav Mukharjee")
+         console.log(1);
+            }
+       
+ 
+         });
+        
+    });
+
+        
+    }
+   
+ 
+});
+    </script>
+</head>
+<body ng-app ="myapp2" ng-controller ="myctrl2">
+  <h1 >Welcome{{datastore.Name}}</h1>
+   <div ng-model="Ques">
+      Q:{{Ques}}
+       <ul>
+			<li ng-repeat="option in Ans">
+				<label>
+					<input type="radio" name="answer" ng-model="value" value="foo" ng-change="change(option)"> 
+					{{option}}
+				</label>
+			</li>
+		</ul>
+
+		<ul>
+		    <li  ng-class={"green":i.IsMark} ng-repeat =" i in ArrImage" >
+                     &#x25EF;
+		     		    </li>
+		    
+		</ul>
+
+</div>
+<Button type ="button" ng-click="call()" >Next</Button>
+    <Button type ="button" ng-click="callP()" ng-disabled="disableButtons">Prev</Button>
+    </body>
+</html>

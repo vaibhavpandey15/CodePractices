@@ -1,0 +1,2 @@
+var foo = {"User":[{Name:"Vaibhav",Password:1111},{Name:"Prayas",Password:2222},{Name:"Amit",Password:3333}]}
+var doo = {"Qun":[{Qn:"God",Ans:"Ram",Count:1},{Qn:"Planet",Ans:"Earth",Count:2},{Qn:"Country",Ans:"India",Count:3}]}

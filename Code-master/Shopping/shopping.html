@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping</title>
+    <script src="../libs/angular.min.js"></script>
+    <script>
+        var app = angular.module("myapp",[]);
+        app.factory("myfactory",()=>{
+           var obj ={
+        add(){ 
+            var product ={"shoes":[{Name:'Puma',Price:1000,Images:"images/puma1.jpg"},{Name:'Nike',Price:2000,Images:"images/Nike1.jpg"}],"cloths":[{Name:'HRX',Price:2000,Images:"images/Jacket1.jpg"},{Name:'jj',Price:200,Images:"images/jacket2.jpg"}]}
+                    return product;
+                    },
+                    ShoesList(){
+                    var a = this.add().shoes;
+                
+                        return a;
+                    console.log(a);
+                    
+                    },
+               ClothList(){
+                var b = this.add().cloths;
+                   return b;
+               }
+           }
+                    
+          return obj;
+            
+        });
+        app.controller("myctrl",($scope,myfactory)=>{
+            $scope.ShoesList=()=>{
+                $scope.product = myfactory.ShoesList();
+               console.log($scope.product);
+              
+            }
+            $scope.ClothList=()=>{
+                $scope.product = myfactory.ClothList();
+              
+            }
+        });
+        
+    </script>
+</head>
+<body ng-app="myapp" ng-controller ="myctrl">
+ <button ng-click="ShoesList()">Shoes</button>
+ <button ng-click="ClothList()">Fashion</button>
+ <div >
+ <ul>
+   
+    <li ng-repeat="i in product">
+         {{i.Name}}
+         <br>
+         <img ng-src="{{i.Images}}"  width="200" height="200">
+         <br>
+        Price:{{i.Price}}
+         
+    </li>
+</ul>
+     </div>
+
+<!--
+
+<ul>
+    <li ng-repeat= "i in product1">
+    {{i.Brand}}
+    <br>
+   <img ng-src="{{i.Images}}"  width="200" height="200">
+            <br>
+        Price:{{i.Price}}
+    
+             
+             
+    </li>
+</ul>
+-->
+
+</body>
+</html>

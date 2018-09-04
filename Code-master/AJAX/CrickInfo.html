@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cricket Info</title>
+    <script src="libs/angular.min.js"></script>
+    <script>
+        var app = angular.module("myapp",[]);
+        app.factory("myfactory",($http,$q)=>{
+            var object = {
+                callServer(pid){
+                    console.log("call Server.................")
+                    var pr =$q.defer();
+                    //var url = "server.json"
+                    var url ="http://cricapi.com/api/playerStats?pid="+pid+"&apikey=yb0bOHq3cOf6FTy7YcvX8TXD8c72 ";
+                    $http.get(url).then(function(data){
+                        console.log(data);
+                        pr.resolve(data.data);
+                    }
+                ,function(err){
+                        pr.reject(err);
+                    
+                                    
+                    });
+                return pr.promise; 
+            }
+            }
+            return object;
+        });
+        app.controller("myctrl",($scope,myfactory)=>{
+            $scope.callMe=()=>{
+                console.log("call me call....")
+                var pid = $scope.playerid;
+                var promise = myfactory.callServer(pid);
+                for(var i = 1; i<=10; i++){
+				console.log("DO Something else",i);
+			}
+                promise.then(function(data){
+                 $scope.result = data;
+                },
+                             function(err){
+                                       $scope.result =err;
+                                       
+                });
+                
+            }
+            
+        })
+    </script>
+</head>
+ <body ng-app="myapp" ng-controller="myctrl">
+<select ng-model="playerid" ng-change="callMe()">
+		<option value="28081">M.S.Dhoni</option>
+		<option value="35320">Sachin</option>
+	</select>
+	
+	<table>
+		<tr>
+			<td>Image</td>
+			<td><img ng-src="{{result.imageURL}}" ></td>
+		</tr>
+		<tr>
+			<td>Name</td>
+			<td>{{result.fullName}}</td>
+		</tr>	
+		<tr>
+			<td>Profile</td>
+			<td>{{result.profile}}</td>
+		</tr>
+		<tr>
+			<td>Batting Style</td>
+			<td>{{result.battingStyle}}</td>
+		</tr>
+		<tr>	
+			<td>BORN</td>
+			<td>{{result.born}}</td>
+		</tr>
+		<tr>	
+			<td>Age</td>
+			<td>{{result.currentAge}}</td>
+		</tr>	
+		
+	</table>
+</body>
+</html>

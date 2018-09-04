@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>location</title>
+	<script src="/libs/angular.min.js"></script>
+	<script src="/module/app.js"></script>
+	<script src="/factory/locationfactory.js"></script>
+	<script src="/controller/locationcontroller.js"></script>
+</head>
+<body ng-app="myapp" ng-controller="myctrl">
+<input type="text" ng-model="search" placeholder="Type Pincode to Search">
+	<button ng-click="doSearch()">Search</button>
+	<ol>
+		<li ng-repeat ="i in result">
+			<p1>District:{{i.District}}</p1><br>
+			<p1>Name:{{i.Name}}</p1><br>
+			<p1>Region:{{i.Region}}</p1><br>
+			<p1>State:{{i.State}}</p1><br>
+			<hr>
+		
+
+		</li>
+	</ol>
+</body>
+</html>
